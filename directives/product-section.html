@@ -1,0 +1,16 @@
+<div class="{{className}}">
+    <div ng-repeat="product in productList">
+        <div class="col-sm-3">
+            <a ui-sref="user.detail({name: product.name, id: product.id})" ">
+                <img class="img-responsive thumbnail " ng-src="data:image/JPEG;base64,{{(product.listImage | filter:{type: 'sm-ava'})[0].data}}"></img>
+                <h4>{{product.name}}<br/>{{product.source}}</h4>
+                <p ng-if="product.discount==0 " class="price ">{{product.price | currency:undefined:0}}</p>
+                <p ng-if="product.discount> 0">
+                    <strike style="font-size:12px">{{product.price | currency:undefined:0}}</strike>
+                    <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                    <span class="price">{{(product.price * (100-product.discount)/100) - ((product.price * (100-product.discount)/100))%1000 | currency:undefined:0}}</span>
+                </p>
+            </a>
+        </div>
+    </div>
+</div>

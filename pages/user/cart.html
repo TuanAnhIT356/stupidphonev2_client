@@ -1,0 +1,73 @@
+<banner-section></banner-section>
+<brand-section></brand-section>
+<section>
+    <div class="container">
+        <hr/>
+        <div ng-if="cartService.getTotalProduct() > 0">
+            <div id="cart-table" class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr class="info">
+                            <th style="width: 10%">Hình ảnh</th>
+                            <th style="width: 40%">Tên Sản Phẩm</th>
+                            <th style="width: 20%">Giá</th>
+                            <th>Số lượng</th>
+                            <th style="width: 10%">Thành tiền</th>
+                            <th style="width: 5%"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in cartService.cart">
+                            <td><img ng-src="data:image/JPEG;base64,{{(item.product.listImage | filter:{type: 'sm-ava'})[0].data}}" style="width:60px; height:40px" /></td>
+                            <td>{{item.product.name}}</td>
+                            <td>{{(item.product.price * (100-item.product.discount)/100) - ((item.product.price * (100-item.product.discount)/100))%1000 | currency:undefined:0}}</td>
+                            <td><input class="quantum-input" type="number" ng-model="item.quantum" min="1" max="10" style="background-color:#f2f2f2" /></td>
+                            <td>{{((item.product.price * (100-item.product.discount)/100) - ((item.product.price * (100-item.product.discount)/100))%1000) * item.quantum | currency:undefined:0}}</td>
+                            <td class="text-center"><button ng-click="cartService.deleteItem($index)" class="del-btn btn btn-info btn-xs"><i class="fa fa-close"></i></button></td>
+                        </tr>
+                        <tr class="info">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><strong style="font-size:16px">TỔNG:</strong></td>
+                            <td>{{cartService.getTotalValue() | currency:undefined:0}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div ng-if="cartService.getTotalProduct() <= 0" class="text-center" style="margin:30px">
+            <span class="alert alert-danger" style="font-weight:bold">CHƯA CÓ SẢN PHẨM NÀO</span>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <a ui-sref="user.home" id="back-btn" class="btn btn-primary btn-lg large-btn"><span class="glyphicon glyphicon-arrow-left"></span> XEM THÊM SẢN PHẨM</a>
+            </div>
+            <div class="col-sm-3">
+                <button ng-click="cartService.saveCart()" class="btn btn-primary btn-lg large-btn">LƯU GIỎ HÀNG</button>
+            </div>
+            <div class="col-sm-3">
+                <button ng-click="cartService.clear()" ng-disabled="cartService.getTotalProduct() <= 0" class="btn btn-primary btn-lg large-btn">XÓA GIỎ HÀNG</button>
+            </div>
+            <div class="col-sm-3">
+                <button ng-if="authService.isLoggedIn()" data-toggle="modal" data-target="#sumit-form" ng-disabled="cartService.getTotalProduct() <= 0" class="btn btn-primary btn-lg large-btn">XÁC NHẬN MUA HÀNG 
+					<span class="glyphicon glyphicon-arrow-right"></span>
+				</button>
+                <button ng-if="!authService.isLoggedIn()" ng-click="authService.alertAuth()" ng-disabled="cartService.getTotalProduct() <= 0" class="btn btn-primary btn-lg large-btn">XÁC NHẬN MUA HÀNG 
+					<span class="glyphicon glyphicon-arrow-right"></span>
+				</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<submit-cart-modal></submit-cart-modal>
+
+<section id="section-recommend" class="section-item">
+    <div class="container">
+        <hr/>
+        <h3 class="text-center" style="font-weight:bold; color:#3385ff; margin:5px 0;">CÓ THỂ BẠN THÍCH</h3>
+        <product-section class-name="row text-center" product-list="recommendProducts"></product-section>
+    </div>
+</section>

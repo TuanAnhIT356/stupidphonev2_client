@@ -1,0 +1,207 @@
+<div>
+    <header id="header">
+        <div class="container">
+            <div class="col-sm-3 text-center">
+                <img class="img-responsive" src="resources/img/template/logo.png" alt="logo" style="height:60px; width:250px; margin: 0 auto">
+            </div>
+            <div class="col-sm-5 text-center">
+            </div>
+            <div id="form-div" class="col-sm-4 vertical-center">
+                <br>
+                <form id="search-bar" class="form-inline">
+                    <div class="input-group">
+                        <input type="text" class="form-control" size="350" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default search-button"><i class="glyphicon glyphicon-search"></i></button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <!--Navi Bar-->
+    <nav class="navbar navbar-default" ui-scrollpoint>
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" ui-sref=".home"><i class="glyphicon glyphicon-home"></i></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a ui-sref=".groupProductByBrand({brandName: 'apple'})">Apple</a></li>
+                    <li><a ui-sref=".groupProductByBrand({brandName: 'samsung'})">Samsung</a></li>
+                    <li><a ui-sref=".groupProductByBrand({brandName: 'htc'})">HTC</a></li>
+                    <li><a ui-sref=".groupProductByBrand({brandName: 'oppo'})">Oppo</a></li>
+                    <li><a ui-sref=".groupProductByBrand({brandName: 'sony'})">Sony</a></li>
+                    <li><a ui-sref=".groupProductByBrand({brandName: 'more'})">More</a></li>
+                </ul>
+                <ul id="bar-right" class="nav navbar-nav navbar-right">
+                    <li ng-show="currentUser == null"><a id="login-btn" href="" data-toggle="modal" data-target="#myModal">Đăng Nhập</a></li>
+                    <li ng-show="currentUser == null"><a id="reg-btn" href="" data-toggle="modal" data-target="#myModal">Đăng Ký</a></li>
+                    <li ng-if="currentUser != null">
+                        <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="font-size:16px">
+                            {{currentUser.username}}              
+                            <span class=" fa fa-angle-down" style="font-weight:bold"></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-usermenu animated fadeInDown pull-right" style="background-color: #5f5f5f">
+                            <li>
+                                <a ui-sref='.customerInfo'><i class="fa fa-user"></i> Thông tin cá nhân</a>
+                            </li>
+                            <li>
+                                <a href='' data-toggle="modal" data-target="#changePassword"><i class="fa fa-lock"></i> Đổi mật khẩu</a>
+                            </li>
+                            <li>
+                                <a ng-click="logout()"><i class="fa fa-sign-out"></i> Đăng xuất</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a ui-sref=".cart">
+                            <span class="badge " style="background-color:#ff0000;">{{cartService.getTotalProduct()}}</span> MY CART<span class="glyphicon glyphicon-shopping-cart"></span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!--Modal Login/Registry -->
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3>Welcome to <span>STUPID PHONE</span></h3>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs modal-tab">
+                        <li id="login-tab"><a data-toggle="tab" href="#login" target="_self">Đăng Nhập</a></li>
+                        <li id="reg-tab"><a data-toggle="tab" href="#reg" target="_self">Đăng Ký</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="login" class="tab-pane fade">
+                            <form ng-submit="login()" class="frm" role="form">
+                                <p class="text-center" style="color:#ff4d4d; font-weight: bold">{{loginError}}</p>
+                                <p class="text-center" style="color:#ff4d4d; font-weight: bold">{{authError}}</p>
+                                <p class="text-center" style="color:#0066ff; font-weight: bold">{{registerSuccess}}</p>
+                                <div class="form-group">
+                                    <input type="text" ng-model="username" class="form-control" placeholder="Username" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" ng-model="password" class="form-control" placeholder="Password" required>
+                                </div>
+                                <div class="checkbox">
+                                    <label><input type="checkbox"> Remember me</label>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-lg large-btn">Đăng Nhập</button>
+                            </form>
+                        </div>
+                        <div id="reg" class="tab-pane fade">
+                            <form method="POST" class="frm" role="form">
+                                <p class="text-center" style="color:#ff4d4d; font-weight: bold">{{registerError}}</p>
+                                <div class="form-group">
+                                    <input type="text" ng-model="username" class="form-control" placeholder="Username" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" ng-model="password" class="form-control" placeholder="Password" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" ng-model="confirmPassword" class="form-control" placeholder="Confirm password" required>
+                                </div>
+                                <button type="submit" ng-click="register()" class="btn btn-primary btn-lg large-btn">Đăng Ký</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="changePassword" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3>Welcome to <span>STUPID PHONE</span></h3>
+                </div>
+                <div class="modal-body">
+                    <ul class="nav nav-tabs modal-tab">
+                        <li id="changepwd-tab" class="active"><a data-toggle="tab" href="#changePwd" target="_self">Đổi Mật Khẩu</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div id="changePwd" class="tab-pane fade in active">
+                            <form method="POST" class="frm" role="form">
+                                <p class="text-center" style="color:#ff4d4d; font-weight: bold">{{changePasswordError}}</p>
+                                <div class="form-group">
+                                    <input type="password" ng-model="oldPassword" class="form-control" placeholder="Old Password" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" ng-model="newPassword" class="form-control" placeholder="New Password" required>
+                                </div>
+                                <button type="submit" ng-click="changePassword()" class="btn btn-primary btn-lg large-btn">Xác nhận</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div ui-view autoscroll="true"></div>
+
+    <!--Footer-->
+    <footer id="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <h3>Thông Tin Liên Hệ</h3>
+                    <ul>
+                        <li><a href="#">Bán hàng: <strong>1900.6112</strong> hoặc <strong>04.7106.9000</strong></a></li>
+                        <li><a href="#">Email góp ý: <strong>dhl1402@gmail.com</strong></a></li>
+                        <li><a href="#">Hotline: <strong>0168.666.7071</strong></a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3>Hỗ Trợ Khách Hàng</h3>
+                    <ul>
+                        <li><a href="#">Tìm hiểu về trả góp</a></li>
+                        <li><a href="#">Bảo hành</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Hướng dẫn mua hàng online</a></li>
+                        <li><a href="#">Giao hàng & Thanh toán</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h3>Hệ thống cửa hàng</h3>
+                    <ul>
+                        <li><a href="#">Hà Nội</a></li>
+                        <li><a href="#">TP Hồ Chí Minh</a></li>
+                        <li><a href="#">Đà Nẵng</a></li>
+                        <li><a href="#">Nha Trang</a></li>
+                        <li><a href="#">Hải Phòng</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <ul class="nav nav-pills nav-stacked custom-pills text-center" style="padding-left:0">
+                        <li><a href="#"><i class="fa fa-facebook-square"></i> FACEBOOK</a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i> TWITTER<span>&nbsp&nbsp&nbsp&nbsp&nbsp</span></a></li>
+                        <li><a href="#"><i class="fa fa-instagram"></i> INSTAGRAM</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="up-icon text-center">
+                <a href="#myPage" target="_self" style="font-size:35px;">
+                    <span class="glyphicon glyphicon-chevron-up"></span>
+                </a>
+            </div>
+        </div>
+    </footer>
+    <script src="resources/jquery/my_jquery.js"></script>
+</div>

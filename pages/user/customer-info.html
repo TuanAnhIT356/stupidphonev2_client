@@ -1,0 +1,112 @@
+<banner-section></banner-section>
+<brand-section></brand-section>
+<div class="container">
+    <div class="row">
+        <!--THÔNG TIN KHÁCH HÀNG-->
+        <div id="user-info" class="col-sm-6" style="border-right: 1px solid #e6e6e6" ng-init="isReadOnly = true">
+            <h3 class="text-center" style="font-weight:bold; color:#3385ff;">Thông tin khách hàng</h3>
+            <form class="form-horizontal form-label-left my-form">
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12">Họ tên:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" class="form-control col-md-8 col-xs-12" ng-model="currentUser.user.name" ng-readonly="isReadOnly" required="required" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12">Ng.sinh:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="date" class="form-control col-md-8 col-xs-12" ng-model="currentUser.user.birthdate" ng-readonly="isReadOnly" required="required" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12">Giới tính:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <select ng-model="currentUser.user.sex" class="form-control col-md-8 col-xs-12" style="font-size: 18px" ng-disabled="isReadOnly" required="required">
+      						<option value="" disabled selected hidden>Giới tính</option>
+                            <option value="Nam">Nam</option>
+			      			<option value="Nữ">Nữ</option>
+      					</select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12">SĐT:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" class="form-control col-md-8 col-xs-12" ng-model="currentUser.user.phoneNumber" ng-readonly="isReadOnly" required="required" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-md-2 col-sm-2 col-xs-12">Địa chỉ:</label>
+                    <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input type="text" class="form-control col-md-8 col-xs-12" ng-model="currentUser.user.address" ng-readonly="isReadOnly" required="required" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div id="back-div" class="col-sm-6">
+                        <a href='#/' class="btn btn-primary btn-lg large-btn">Quay về trang chủ</a>
+                    </div>
+                    <div id="edit-div" class="col-sm-6">
+                        <button ng-show="isReadOnly" ng-click="isReadOnly = false" class="btn btn-primary btn-lg large-btn">Cập nhật thông tin</button>
+                        <button ng-show="!isReadOnly" ng-click="isReadOnly = true; userService.saveInfo()" class="btn btn-primary btn-lg large-btn">Lưu</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-6">
+            <h3 class="text-center" style="font-weight:bold; color:#3385ff;">Danh sách hóa đơn</h3>
+
+            <div ng-if="(currentUser.listCart|filter:{status: 'pending'}).length <= 0 && (currentUser.listCart|filter:{status: 'done'}).length <= 0" class="text-center " style="margin: 40px ">
+                <span class="alert alert-danger " style="font-weight:bold ">CHƯA CÓ HÓA ĐƠN NÀO</span>
+            </div>
+            <table ng-if="(currentUser.listCart|filter:{status: 'pending'}).length > 0 || (currentUser.listCart|filter:{status: 'done'}).length > 0" class="table table-responsive table-striped projects">
+                <thead>
+                    <tr>
+                        <th style="width: 30%">Ngày đặt hàng</th>
+                        <th>Trạng thái</th>
+                        <th style="width: 28%">Tổng tiền</th>
+                    </tr>
+                </thead>
+            </table>
+            <div class="panel-group">
+                <div ng-repeat="cart in currentUser.listCart | filter:{status: 'done'}" class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" ng-href="#{{cart.id}}" target="_self" style="text-decoration:none; color:black">
+                            <span style="width:27%; display:inline-block">{{cart.insertDate}}</span>
+                            <span style="width: 47%; display: inline-block">&nbsp&nbsp&nbsp&nbspĐã giao hàng</span>
+                            <span style="display:inline-block">{{cart.total | currency:undefined:0}}</span>
+                        </a>
+                    </div>
+                    <div id="{{cart.id}}" ng-repeat="item in cart.listItems" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <span style="width:25%; display:inline-block"><img style="width:40%" ng-src="data:image/JPEG;base64,{{(item.product.listImage | filter:{type: 'sm-ava'})[0].data}}"/></span>
+                            <span style="width:49%; display:inline-block">{{item.product.name}}({{item.quantum}})</span>
+                            <span style="display: inline-block">{{((item.product.price * (100-item.product.discount)/100) - ((item.product.price * (100-item.product.discount)/100))%1000) * item.quantum | currency:undefined:0}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div ng-repeat="cart in currentUser.listCart | filter:{status: 'pending'}" class="panel panel-default">
+                    <div class="panel-heading">
+                        <a data-toggle="collapse" ng-href="#{{cart.id}}" target="_self" style="text-decoration:none; color:black">
+                            <span style="width:27%; display:inline-block">{{cart.insertDate}}</span>
+                            <span style="width: 47%; display: inline-block">&nbsp&nbsp&nbsp&nbspĐang chờ</span>
+                            <span style="display:inline-block">{{cart.total | currency:undefined:0}}</span>
+                        </a>
+                    </div>
+                    <div id="{{cart.id}}" ng-repeat="item in cart.listItems" class="panel-collapse collapse">
+                        <div class="panel-body">
+                            <span style="width:25%; display:inline-block"><img style="width:40%" ng-src="data:image/JPEG;base64,{{(item.product.listImage | filter:{type: 'sm-ava'})[0].data}}"/></span>
+                            <span style="width:49%; display:inline-block">{{item.product.name}}({{item.quantum}})</span>
+                            <span style="display: inline-block">{{((item.product.price * (100-item.product.discount)/100) - ((item.product.price * (100-item.product.discount)/100))%1000) * item.quantum | currency:undefined:0}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<s:footer/>

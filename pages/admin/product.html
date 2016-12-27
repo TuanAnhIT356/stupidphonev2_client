@@ -1,0 +1,439 @@
+<div class="right_col" role="main">
+    <div class="">
+        <div class="row top_tiles" style="margin: 10px 0;">
+            <div class="text-center" style="margin: 0 0 30px 0;">
+                <h1>
+                    Product -
+                    <button class="btn btn-primary btn-lg" data-toggle="modal" data-target="#createModal" style="width: 200px; background-color: #73879C">
+                        <i class="fa fa-wrench"></i> Create
+                    </button>
+                </h1>
+            </div>
+
+            <div class="col-md-12">
+                <table class="table table-responsive table-striped projects">
+                    <thead>
+                        <tr>
+                            <th style="width: 10%; text-align: center">Hình ảnh</th>
+                            <th style="width: 2%; text-align: center">Mã</th>
+                            <th style="width: 10%; text-align: center">Tên</th>
+                            <th style="text-align: center">Nguồn</th>
+                            <th style="text-align: center">Giá</th>
+                            <th style="text-align: center">SL</th>
+                            <th style="width: 5%; text-align: center">SLB</th>
+                            <th style="width: 5%; text-align: center">C.Khấu</th>
+                            <th style="text-align: center">Click</th>
+                            <th style="width: 20%; text-align: center">Ngày nhập</th>
+                            <th style="width: 20%; text-align: center">Bảo hành</th>
+                            <th style="width: 20%; text-align: center">Tình trạng</th>
+                            <th style="text-align: center">NSX</th>
+                            <th style="width: 10%; text-align: center">Tác động</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="item in listProduct">
+                            <td>
+                                <ul class="list-inline">
+                                    <li>
+                                        <img ng-src="data:image/JPEG;base64,{{(item.listImage | filter:{type: 'sm-ava'})[0].data}}" style="width:72px; height:45px" alt="Product Small Image">
+                                        <button class="btn md-btn btn-success" ng-click="selectProduct($index); getImages()" data-toggle="modal" data-target="#imageModal"><i class="fa fa-picture-o"> IMG</i></button>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td style="text-align: center">{{item.id}}</td>
+                            <td style="text-align: center">{{item.name}}</td>
+                            <td style="text-align: center">{{item.source}}</td>
+                            <td style="text-align: center">{{item.price}}</td>
+                            <td style="text-align: center">{{item.quantum}}</td>
+                            <td style="text-align: center">{{item.soldCount}}</td>
+                            <td style="text-align: center">{{item.discount}}%</td>
+                            <td style="text-align: center">{{item.favorite}}</td>
+                            <td style="text-align: center">{{item.insertDate}}</td>
+                            <td style="text-align: center">{{item.guarantee}}</td>
+                            <td style="text-align: center">{{item.status}}</td>
+                            <td style="text-align: center">{{item.producer.name | uppercase}}</td>
+                            <td>
+                                <button class="btn btn-primary btn-xs" ng-click="selectProduct($index)" data-toggle="modal" data-target="#detailModal"><i class="fa fa-folder"></i> Details </button>
+                                <button class="btn btn-info btn-xs" ng-click="selectProduct($index)" data-toggle="modal" data-target="#editProductModal"><i class="fa fa-pencil"></i> Edit </button>
+                                <button class="btn btn-danger btn-xs" ng-really-message="Bạn chắc chắn muốn xóa sản phẩm này?" ng-really-click="deleteProduct(item.id,$index)"><i class="fa fa-trash-o"></i> Delete </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!--Create Modal-->
+        <div id="createModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                        <h4 class="modal-title" id="myModalLabel">Create Product</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 col-xs-12">
+                                <form class="form-horizontal form-label-left input_mask">
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.name" class="form-control" placeholder="Tên sản phẩm">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="number" ng-model="product.price" class="form-control" placeholder="Giá">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="number" ng-model="product.quantum" class="form-control" placeholder="Số lượng">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="number" ng-model="product.discount" class="form-control" placeholder="Khuyến mãi">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.source" class="form-control" placeholder="Nguồn">
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.status" class="form-control" placeholder="Tình Trạng">
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.guarantee" class="form-control" placeholder="Bảo hành">
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <select class="form-control" style="height: 45px; font-size: 16px" ng-model="product.producer" ng-options="(obj.name | uppercase) for obj in listProducer"> 
+                                            <option value="" disabled selected hidden>Nhà sản xuất</option>
+                                        </select>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-6 col-xs-12">
+                                <form class="form-horizontal form-label-left input_mask">
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail._3G" class="form-control" placeholder="3G">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail._4G" class="form-control" placeholder="4G">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.sim" class="form-control" placeholder="Sim">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.size" class="form-control" placeholder="Kích thước">
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.screen" class="form-control" placeholder="Thông tin màn hình">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.screenSize" class="form-control" placeholder="Kích thước màn hình">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.internalMemory" class="form-control" placeholder="Bộ nhớ trong">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.os" class="form-control" placeholder="Hệ điều hành">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.chipset" class="form-control" placeholder="Chipset">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.cpu" class="form-control" placeholder="CPU">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.pin" class="form-control" placeholder="Pin">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.primaryCamera" class="form-control" placeholder="Camera sau">
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <input type="text" ng-model="product.productDetail.secondaryCamera" class="form-control" placeholder="Camera trước">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="height: 70px">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" ng-click="createProduct()" data-dismiss="modal" data-backdrop="false" class="btn btn-primary">Create</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Edit Product Modal-->
+        <div id="editProductModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                        <h4 class="modal-title" id="myModalLabel">Edit Product</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <form class="form-horizontal form-label-left input_mask">
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Tên sản phẩm: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.name" class="form-control" placeholder="Tên sản phẩm">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size:16px">Giá: </label>
+                                        <div class="col-md-8 col-sm-8 col-xs-12 form-group">
+                                            <input type="number" ng-model="chosenProduct.price" class="form-control" placeholder="Giá">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size:16px">Số lượng: </label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12 form-group">
+                                            <input type="number" ng-model="chosenProduct.quantum" class="form-control" placeholder="Số lượng">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-4 col-sm-4 col-xs-12" style="font-size:16px">Khuyến mãi: </label>
+                                        <div class="col-md-8 col-sm-8 col-xs-12 form-group">
+                                            <input type="number" ng-model="chosenProduct.discount" class="form-control" placeholder="Khuyến mãi">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-3 col-sm-3 col-xs-12" style="font-size:16px">Nguồn: </label>
+                                        <div class="col-md-9 col-sm-9 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.source" class="form-control" placeholder="Nguồn">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Tình trạng: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.status" class="form-control" placeholder="Tình Trạng">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Bảo hành: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.guarantee" class="form-control" placeholder="Bảo hành">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Nhà sản xuất: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <select class="form-control" style="height: 45px; font-size: 16px" ng-model="chosenProduct.producer" ng-options="(obj.name | uppercase) for obj in listProducer"> 
+                                            <option value="" disabled selected hidden>Nhà sản xuất</option>
+                                        </select>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="height: 70px">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" ng-click="saveDetail()" data-dismiss="modal" data-backdrop="false" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Detail Modal-->
+        <div id="detailModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                        <h4 class="modal-title" id="myModalLabel">Product Detail</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                                <form class="form-horizontal form-label-left input_mask">
+                                    <div class="col-md-6 col-sm-6 col-xs-12  form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">3G: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail._3G" class="form-control" placeholder="3G">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">4G: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail._4G" class="form-control" placeholder="4G">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Sim: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.sim" class="form-control" placeholder="Sim">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Size: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.size" class="form-control" placeholder="Kích thước">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 col-xs-12 form-group">
+                                        <label class="control-label col-md-1 col-sm-1 col-xs-12" style="font-size:16px">Screen Info: </label>
+                                        <div class="col-md-11 col-sm-11 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.screen" class="form-control" placeholder="Thông tin màn hình">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Screen: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.screenSize" class="form-control" placeholder="Kích thước màn hình">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Memory: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.internalMemory" class="form-control" placeholder="Bộ nhớ trong">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">OS: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.os" class="form-control" placeholder="Hệ điều hành">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Chipset: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.chipset" class="form-control" placeholder="Chipset">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">CPU: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.cpu" class="form-control" placeholder="CPU">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Pin: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.pin" class="form-control" placeholder="Pin">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Camera sau: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.primaryCamera" class="form-control" placeholder="Camera sau">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 col-sm-6 col-xs-12 form-group">
+                                        <label class="control-label col-md-2 col-sm-2 col-xs-12" style="font-size:16px">Camera trước: </label>
+                                        <div class="col-md-10 col-sm-10 col-xs-12 form-group">
+                                            <input type="text" ng-model="chosenProduct.productDetail.secondaryCamera" class="form-control" placeholder="Camera trước">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="height: 70px">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" ng-click="deleteDetail()" class="btn btn-danger">Delete</button>
+                            <button type="button" ng-click="saveDetail()" data-dismiss="modal" data-backdrop="false" class="btn btn-primary">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Image Modal-->
+        <div id="imageModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span>
+                          </button>
+                        <h4 class="modal-title" id="myModalLabel">Product Image</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <h4 style="text-align: center">Small Avatar</h4>
+                                <div>
+                                    <input type="file" ng-files="myFile" />
+                                    <button ng-click="uploadFile('sm-ava')"><i class="fa fa-upload"></i> Upload</button>
+                                </div>
+                                <br>
+                                <div style="text-align: center">
+                                    <img ng-if="(listImage | filter:{type: 'sm-ava'}).length  > 0" ng-src="data:image/JPEG;base64,{{(listImage | filter:{type: 'sm-ava'})[0].data}}" style="width:200px; height:150px">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <h4 style="text-align: center">Large Avatar</h4>
+                                <div>
+                                    <input type="file" ng-files="myFile" />
+                                    <button ng-click="uploadFile('lg-ava')"><i class="fa fa-upload"></i>Upload</button>
+                                </div>
+                                <div style="text-align: center">
+                                    <img ng-if="(listImage | filter:{type: 'lg-ava'}).length > 0" ng-src="data:image/JPEG;base64,{{(listImage | filter:{type: 'lg-ava'})[0].data}}" style="width:120px; height:240px">
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <h4 style="text-align: center">Other Images</h4>
+                            <div>
+                                <input type="file" ng-files="myFile" />
+                                <button ng-click="uploadFile('other')"><i class="fa fa-upload"></i>Upload</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="height: 70px">
+                        <div class="form-group">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
