@@ -2,7 +2,7 @@ spApp.service('authService', ['$rootScope', '$location', '$timeout', '$filter', 
     var self = this;
 
     this.init = function() {
-        if ($sessionStorage.currentUser.user != null)
+        if ($sessionStorage.currentUser!= null && $sessionStorage.currentUser.user != null)
             $sessionStorage.currentUser.user.birthdate = new Date($sessionStorage.currentUser.user.birthdate);
         $rootScope.currentUser = $sessionStorage.currentUser;
         $rootScope.authService = self;
